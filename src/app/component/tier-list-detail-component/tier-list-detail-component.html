@@ -1,0 +1,59 @@
+@if (tierList) {
+  <div class="container">
+    <header>
+      <a routerLink="/home" class="btn-back">← Retour</a>
+      <h1>{{ tierList.nom }}</h1>
+      <p>Créé par {{ tierList.utilisateur?.prenom }} {{ tierList.utilisateur?.nom }}</p>
+    </header>
+
+    <div class="tier-board">
+      @for (tier of tiers; track tier) {
+        <div class="tier-row">
+          <div class="tier-label" [ngClass]="'tier-' + tier">
+            {{ tier }}
+          </div>
+
+          <div class="tier-content">
+            @for (contenu of getContentsByTier(tier); track contenu.id) {
+              <div class="element-card">
+                {{ contenu.element?.nom }}
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (isOwner) {
+      <div class="selection-area">
+        <h3>Ajouter des éléments</h3>
+
+        @if (availableElements.length > 0) {
+          <div class="available-grid">
+            @for (element of availableElements; track element.id) {
+              <div class="available-item">
+                <span class="element-name">{{ element.nom }} <small>({{ element.categorie }})</small></span>
+
+                <div class="actions">
+                  <button (click)="addToTier(element, 'S')" class="btn-tier tier-S">S</button>
+                  <button (click)="addToTier(element, 'A')" class="btn-tier tier-A">A</button>
+                  <button (click)="addToTier(element, 'B')" class="btn-tier tier-B">B</button>
+                  <button (click)="addToTier(element, 'C')" class="btn-tier tier-C">C</button>
+                  <button (click)="addToTier(element, 'D')" class="btn-tier tier-D">D</button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="info-msg">
+            ✅ Tous les éléments disponibles ont été classés !
+          </div>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <div class="loading">
+    <p>Chargement de la Tier List...</p>
+  </div>
+}
