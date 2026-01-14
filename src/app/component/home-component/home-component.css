@@ -30,3 +30,13 @@
 .btn:hover { opacity: 0.9; }
 .btn:disabled { background: #ccc; cursor: not-allowed; }
 .empty-msg { text-align: center; color: #888; margin-top: 30px; }
+
+footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+}

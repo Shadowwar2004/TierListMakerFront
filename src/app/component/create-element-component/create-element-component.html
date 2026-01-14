@@ -1,0 +1,39 @@
+<div class="container">
+  <header>
+    <a routerLink="/home" class="btn-back">← Retour à l'accueil</a>
+    <h2>Ajouter un nouvel élément</h2>
+  </header>
+
+  <div class="form-card">
+    @if (successMessage) {
+      <div class="success-alert">
+        {{ successMessage }}
+      </div>
+    }
+
+    <div class="form-group">
+      <label>Nom de l'oeuvre</label>
+      <input
+        type="text"
+        [(ngModel)]="newElement.nom"
+        placeholder="Ex: Inception, The Witcher..."
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Catégorie</label>
+      <select [(ngModel)]="newElement.categorie">
+        @for (cat of categories; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      (click)="onSubmit()"
+      [disabled]="!newElement.nom">
+      Enregistrer
+    </button>
+  </div>
+</div>

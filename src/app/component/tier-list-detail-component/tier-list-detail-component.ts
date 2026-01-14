@@ -1,19 +1,24 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ContenuDto, TierList, Utilisateur} from '../../models/models';
-import {ActivatedRoute} from '@angular/router';
-import {TierListService} from '../../service/TierListService';
-import {NgClass} from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ContenuDto, TierList, Utilisateur, Element } from '../../models/models';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { TierListService } from '../../service/TierListService';
+import { NgClass, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tier-list-detail-component',
+  standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    RouterModule,
+    CommonModule
   ],
   templateUrl: './tier-list-detail-component.html',
   styleUrl: './tier-list-detail-component.css',
 })
 export class TierListDetailComponent implements OnInit {
   tierList: TierList | null = null;
+
+
   allElements: Element[] = [];
   availableElements: Element[] = [];
 
@@ -30,7 +35,9 @@ export class TierListDetailComponent implements OnInit {
   ngOnInit(): void {
     this.checkLogin();
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadData(id);
+    if (!isNaN(id)) {
+      this.loadData(id);
+    }
   }
 
   checkLogin(): void {
@@ -59,7 +66,7 @@ export class TierListDetailComponent implements OnInit {
   updateAvailableElements(): void {
     if (!this.tierList) return;
     const usedIds = this.tierList.contenus.map(c => c.elementId);
-    this.availableElements = this.allElements.filter(e => !usedIds.includes(Number(e.id)));
+    this.availableElements = this.allElements.filter(e => !usedIds.includes(e.id));
   }
 
   getContentsByTier(tier: string): any[] {
@@ -83,5 +90,3 @@ export class TierListDetailComponent implements OnInit {
     });
   }
 }
-
-

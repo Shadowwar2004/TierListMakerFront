@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
-import {ContenuDto, LoginResponse, TierList, TierListDto, Utilisateur} from '../models/models';
+import {ContenuDto, LoginResponse, TierList, TierListDto, Utilisateur,Element} from '../models/models';
 
 @Injectable({
   providedIn: 'root',
