@@ -48,17 +48,17 @@ export class TierListService {
 
 
   createTierList(dto: TierListDto): Observable<TierList> {
-    return this.http.post<TierList>(`${this.API_URL}/TierList`, dto, { headers: this.getAuthHeaders() });
+    return this.http.post<TierList>(`${this.API_URL}/TierList`, dto, { withCredentials : true, headers: this.getAuthHeaders() });
   }
 
 
   deleteTierList(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/TierList/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.delete<void>(`${this.API_URL}/TierList/${id}`, { withCredentials : true, headers: this.getAuthHeaders() });
   }
 
 
   addContenu(tierListId: number, dto: ContenuDto): Observable<void> {
-    return this.http.post<void>(`${this.API_URL}/TierList/${tierListId}/contenu`, dto, { headers: this.getAuthHeaders() });
+    return this.http.post<void>(`${this.API_URL}/TierList/${tierListId}/contenu`, dto, { withCredentials : true, headers: this.getAuthHeaders() });
   }
 
   // --- ELEMENTS ---
@@ -67,6 +67,6 @@ export class TierListService {
   }
 
   createElement(element: Element): Observable<Element> {
-    return this.http.post<Element>(`${this.API_URL}/Element`, element, { headers: this.getAuthHeaders() });
+    return this.http.post<Element>(`${this.API_URL}/Element`, element, { withCredentials : true, headers: this.getAuthHeaders() });
   }
 }

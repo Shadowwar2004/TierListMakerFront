@@ -1,90 +1,68 @@
 
-<div class="page">
-  <!-- Header / Navbar -->
-  <header class="nav">
-    <div class="brand">
-      <div class="logo">★</div>
-      <span class="name">{{ appName }}</span>
-    </div>
+<div class="container">
+  <header class="header">
+    <div class="logo">★ TierList Maker</div>
 
-    <nav class="links">
-      <a routerLink="/" class="active">Accueil</a>
-      <a routerLink="/about">À propos</a>
-      <a routerLink="/contact">Contact</a>
-    </nav>
-
-    <div class="actions">
-      <a routerLink="/login" class="btn btn-ghost">Connexion</a>
-      <button class="btn btn-primary" (click)="onPrimaryAction()">Commencer</button>
+    <div class="user-info">
+      @if (isLoggedIn) {
+        <span>Bonjour, <strong>{{ currentUser?.prenom }}</strong></span>
+        <button class="btn btn-outline" (click)="logout()">Se déconnecter</button>
+      } @else {
+        <a routerLink="/login" class="btn btn-primary">Se connecter</a>
+      }
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Bienvenue sur <span class="accent">{{ appName }}</span></h1>
-      <p class="subtitle">{{ subtitle }}</p>
+  @if (isLoggedIn) {
+    <section class="create-section">
+      <h2>Nouvelle Tier List</h2>
 
-      <div class="hero-cta">
-        <button class="btn btn-primary" (click)="onPrimaryAction()">Créer un projet</button>
-        <a routerLink="/docs" class="btn btn-ghost">Voir la doc</a>
+      <div class="input-group">
+        <input
+          type="text"
+          [(ngModel)]="newTierListName"
+          placeholder="Nom de votre liste (ex: Meilleurs Films 2024)"
+        >
+        <button
+          class="btn btn-success"
+          (click)="onCreateTierList()"
+          [disabled]="!newTierListName"
+        >
+          + Créer
+        </button>
       </div>
+    </section>
+  }
 
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-value">99%</div>
-          <div class="stat-label">Satisfaction</div>
+  <section class="list-section">
+    <h2>Listes de la communauté</h2>
+
+    <div class="grid">
+      @for (list of tierLists; track list.id) {
+        <div class="card">
+          <div class="card-header">
+            <h3>{{ list.nom }}</h3>
+            <span class="author">
+              Par {{ list.utilisateur?.prenom }} {{ list.utilisateur?.nom }}
+            </span>
+          </div>
+
+          <div class="card-body">
+
+
+
+            @if (isOwner(list)) {
+              <button class="btn btn-danger" (click)="onDelete(list.id)">
+                Supprimer
+              </button>
+            }
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-value">&lt; 1s</div>
-          <div class="stat-label">Chargement</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">4</div>
-          <div class="stat-label">Fonctionnalités</div>
-        </div>
-      </div>
+      }
     </div>
 
-    <div class="hero-card" aria-hidden="true">
-      <div class="card-top">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-      </div>
-      <div class="card-body">
-        <div class="skeleton w-80"></div>
-        <div class="skeleton w-60"></div>
-        <div class="skeleton w-90"></div>
-        <div class="skeleton w-70"></div>
-      </div>
-    </div>
+    @if (tierLists.length === 0) {
+      <p class="empty-msg">Aucune liste pour le moment.</p>
+    }
   </section>
-
-  <!-- Features -->
-  <section class="section">
-    <h2>Pourquoi cette home page ?</h2>
-    <p class="muted">Une base solide pour démarrer rapidement une appli Angular moderne.</p>
-  </section>
-
-  <!-- News -->
-  <section class="section">
-    <div class="section-head">
-      <h2>Actualités</h2>
-      <a routerLink="/news" class="link">Tout voir →</a>
-    </div>
-
-
-
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div>© {{ appName }} — 2026</div>
-    <div class="footer-links">
-      <a routerLink="/privacy">Confidentialité</a>
-      <a routerLink="/terms">Conditions</a>
-    </div>
-  </footer>
 </div>
-

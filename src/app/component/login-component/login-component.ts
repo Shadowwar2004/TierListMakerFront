@@ -3,11 +3,14 @@ import {Router} from '@angular/router';
 import {Utilisateur} from '../../models/models';
 import {TierListService} from '../../service/TierListService';
 import {FormsModule} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-component',
+  standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './login-component.html',
   styleUrl: './login-component.css',
@@ -23,11 +26,9 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // On charge les utilisateurs pour la liste déroulante
     this.tierListService.getUtilisateurs().subscribe({
       next: (data) => {
         this.utilisateurs = data;
-
         if (this.utilisateurs.length > 0) {
           this.selectedUserId = this.utilisateurs[0].id;
         }
@@ -44,11 +45,9 @@ export class LoginComponent implements OnInit {
 
     this.tierListService.login(this.selectedUserId).subscribe({
       next: (response) => {
-        console.log('Connexion réussie ! Token :', response.token);
-        // Le token est stocké automatiquement par le service (voir étape précédente)
+        console.log('Connexion réussie !');
 
-        // Redirection vers la liste des Tier Lists
-        this.router.navigate(['/tierlists']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Erreur login', err);
