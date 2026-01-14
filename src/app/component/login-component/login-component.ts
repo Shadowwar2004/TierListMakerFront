@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {Utilisateur} from '../../models/models';
-import {TierListService} from '../../service/TierListService';
-import {FormsModule} from '@angular/forms';
+
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { Utilisateur } from '../../models/models';
+import { TierListService } from '../../service/TierListService';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -22,20 +23,28 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private tierListService: TierListService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.tierListService.getUtilisateurs().subscribe({
       next: (data) => {
         this.utilisateurs = data;
+
         if (this.utilisateurs.length > 0) {
           this.selectedUserId = this.utilisateurs[0].id;
         }
+
+
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erreur chargement utilisateurs', err);
         this.errorMessage = "Impossible de charger les utilisateurs.";
+
+        //  Affiche l'erreur
+        this.cdr.detectChanges();
       }
     });
   }
@@ -44,15 +53,18 @@ export class LoginComponent implements OnInit {
     if (!this.selectedUserId) return;
 
     this.tierListService.login(this.selectedUserId).subscribe({
-      next: (response) => {
+      next: () => {
         console.log('Connexion réussie !');
-
         this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Erreur login', err);
         this.errorMessage = "Erreur lors de la connexion.";
+
+        //  Affiche l'erreur
+        this.cdr.detectChanges();
       }
     });
   }
 }
+

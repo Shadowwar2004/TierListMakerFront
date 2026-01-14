@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {TierList, TierListDto, Utilisateur} from '../../models/models';
-import {TierListService} from '../../service/TierListService';
-import {FormsModule} from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import { TierListService } from '../../service/TierListService';
+import { TierList, TierListDto, Utilisateur } from '../../models/models';
 
 @Component({
   selector: 'app-home-component',
-  imports: [
-    FormsModule
-
-  ],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './home-component.html',
   styleUrl: './home-component.css',
 })
@@ -21,7 +20,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private tierListService: TierListService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
     this.loadTierLists();
   }
 
-  // Vérifie si l'utilisateur est connecté via le localStorage (stocké lors du login)
   checkLoginStatus(): void {
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
@@ -41,27 +40,31 @@ export class HomeComponent implements OnInit {
       this.isLoggedIn = false;
       this.currentUser = null;
     }
+
+    this.cd.detectChanges();
   }
 
-  // Déconnexion simple
   logout(): void {
     this.tierListService.logout();
     this.isLoggedIn = false;
     this.currentUser = null;
     this.router.navigate(['/login']);
+    this.cd.detectChanges();
   }
 
-  // Charge toutes les listes (Action "Consulter" - Visiteur & Utilisateur)
   loadTierLists(): void {
     this.tierListService.getTierLists().subscribe({
       next: (data) => {
         this.tierLists = data;
+        // Force la mise à jour de la vue une fois les données reçues
+        this.cd.detectChanges();
       },
-      error: (err) => console.error('Erreur chargement listes', err)
+      error: (err) => {
+        console.error('Erreur chargement listes', err);
+      }
     });
   }
 
-  // Action "Créer" - Utilisateur connecté uniquement
   onCreateTierList(): void {
     if (!this.newTierListName.trim()) return;
 
@@ -69,24 +72,26 @@ export class HomeComponent implements OnInit {
 
     this.tierListService.createTierList(dto).subscribe({
       next: () => {
-        this.newTierListName = ''; // Reset du champ
-        this.loadTierLists(); // Rafraichissement automatique (Points gagnés !)
+        this.newTierListName = '';
+        this.loadTierLists(); // Cela rappellera detectChanges() via loadTierLists
       },
-      error: (err) => alert("Erreur lors de la création.")
+      error: (err) => {
+        alert("Erreur lors de la création.");
+      }
     });
   }
 
-  // Vérifie si l'utilisateur connecté est le propriétaire de la liste
   isOwner(tierList: TierList): boolean {
     return this.isLoggedIn && this.currentUser?.id === tierList.utilisateurId;
   }
 
-  // Action "Supprimer" - Propriétaire uniquement
   onDelete(id: number): void {
     if(!confirm("Voulez-vous vraiment supprimer cette liste ?")) return;
 
     this.tierListService.deleteTierList(id).subscribe({
-      next: () => this.loadTierLists(), // Mise à jour auto de la liste
+      next: () => {
+        this.loadTierLists();
+      },
       error: (err) => alert("Impossible de supprimer cette liste.")
     });
   }
