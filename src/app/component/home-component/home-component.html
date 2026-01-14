@@ -1,0 +1,90 @@
+
+<div class="page">
+  <!-- Header / Navbar -->
+  <header class="nav">
+    <div class="brand">
+      <div class="logo">★</div>
+      <span class="name">{{ appName }}</span>
+    </div>
+
+    <nav class="links">
+      <a routerLink="/" class="active">Accueil</a>
+      <a routerLink="/about">À propos</a>
+      <a routerLink="/contact">Contact</a>
+    </nav>
+
+    <div class="actions">
+      <a routerLink="/login" class="btn btn-ghost">Connexion</a>
+      <button class="btn btn-primary" (click)="onPrimaryAction()">Commencer</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Bienvenue sur <span class="accent">{{ appName }}</span></h1>
+      <p class="subtitle">{{ subtitle }}</p>
+
+      <div class="hero-cta">
+        <button class="btn btn-primary" (click)="onPrimaryAction()">Créer un projet</button>
+        <a routerLink="/docs" class="btn btn-ghost">Voir la doc</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">99%</div>
+          <div class="stat-label">Satisfaction</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">&lt; 1s</div>
+          <div class="stat-label">Chargement</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Fonctionnalités</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-card" aria-hidden="true">
+      <div class="card-top">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="card-body">
+        <div class="skeleton w-80"></div>
+        <div class="skeleton w-60"></div>
+        <div class="skeleton w-90"></div>
+        <div class="skeleton w-70"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section">
+    <h2>Pourquoi cette home page ?</h2>
+    <p class="muted">Une base solide pour démarrer rapidement une appli Angular moderne.</p>
+  </section>
+
+  <!-- News -->
+  <section class="section">
+    <div class="section-head">
+      <h2>Actualités</h2>
+      <a routerLink="/news" class="link">Tout voir →</a>
+    </div>
+
+
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>© {{ appName }} — 2026</div>
+    <div class="footer-links">
+      <a routerLink="/privacy">Confidentialité</a>
+      <a routerLink="/terms">Conditions</a>
+    </div>
+  </footer>
+</div>
+

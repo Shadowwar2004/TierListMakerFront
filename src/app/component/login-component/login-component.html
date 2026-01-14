@@ -1,0 +1,24 @@
+
+<div class="login-container">
+  <h2>Connexion</h2>
+
+  <p>Choisissez votre profil :</p>
+
+  @if (errorMessage) {
+    <div class="error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <select [(ngModel)]="selectedUserId" class="user-select">
+    @for (user of utilisateurs; track user.id) {
+      <option [value]="user.id">
+        {{ user.prenom }} {{ user.nom }}
+      </option>
+    }
+  </select>
+
+  <button (click)="onLogin()" [disabled]="!selectedUserId">
+    Se connecter
+  </button>
+</div>
