@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,35 +14,34 @@ import { Element } from '../../models/models';
   styleUrl: 'create-element-component.css'
 })
 export class CreateElementComponent {
-
-  newElement: Element = { id: 0, nom: '', categorie: 'Film' };
-
-
+  newElement: Element = {id: 0, nom: '', categorie: 'Film'};
   categories: string[] = ['Film', 'Série', 'Jeu vidéo'];
   successMessage: string = '';
 
   constructor(
     private tierListService: TierListService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {
+  }
 
   onSubmit(): void {
     if (!this.newElement.nom) return;
 
     this.tierListService.createElement(this.newElement).subscribe({
       next: (created) => {
-        console.log('Élément créé', created);
         this.successMessage = `"${created.nom}" a été ajouté avec succès !`;
-
-        // Reset du formulaire pour en ajouter un autre rapidement
         this.newElement.nom = '';
+        this.cdr.detectChanges();
 
-        // On enlève le message après 3 secondes
-        setTimeout(() => this.successMessage = '', 3000);
+        setTimeout(() => {
+          this.successMessage = '';
+          this.cdr.detectChanges();
+        }, 3000);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         alert("Erreur lors de la création (Vérifiez que vous êtes connecté).");
+        this.cdr.detectChanges();
       }
     });
   }

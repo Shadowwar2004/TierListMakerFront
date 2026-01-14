@@ -56,7 +56,6 @@ export class HomeComponent implements OnInit {
     this.tierListService.getTierLists().subscribe({
       next: (data) => {
         this.tierLists = data;
-        // Force la mise à jour de la vue une fois les données reçues
         this.cd.detectChanges();
       },
       error: (err) => {
@@ -73,7 +72,7 @@ export class HomeComponent implements OnInit {
     this.tierListService.createTierList(dto).subscribe({
       next: () => {
         this.newTierListName = '';
-        this.loadTierLists(); // Cela rappellera detectChanges() via loadTierLists
+        this.loadTierLists();
       },
       error: (err) => {
         alert("Erreur lors de la création.");
